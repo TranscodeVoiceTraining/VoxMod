@@ -17,15 +17,16 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 
-	<script src="recording.js" ></script>
   </head>
   <body>
     
 	<div class="jumbotron">
 	
 		<h1>Record your data</h1>
-		<audio ></audio>    
-    <canvas class="visualizer" width="640" height="100"></canvas> 
+		<audio ></audio>
+    <div class="wrapper"> 
+      <canvas class="visualizer" width="640" height="100"></canvas>
+    </div>
 		<p>Here is some text about the exercise</p>
 		<p><a class="btn btn-lg btn-danger" href="#" role="button">Record</a></p>
 	</div>
@@ -36,5 +37,6 @@
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="canvas.js"></script>
+    <script type="text/javascript" src="pitchfinder.js"></script>
   </body>
 </html>
