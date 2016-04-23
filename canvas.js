@@ -77,7 +77,7 @@ if (navigator.getUserMedia) {
          // biquadFilter.connect(convolver);
          // convolver.connect(gainNode);
          // gainNode.connect(audioCtx.destination);
-         distortion.connect(audioCtx.destination);
+         //distortion.connect(audioCtx.destination);
 
       	 visualize();
          voiceChange();
