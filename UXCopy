@@ -1,0 +1,69 @@
+//Initial install/login splash
+
+Welcome to VoxMod!
+
+Modding your voice is rarely easy. But your voyage can take you to strange and wonderful places. VoxMod is here to help you on your way.
+
+VoxMod was produced with trans and non-binary people in mind. Because the way voices sound varies so much, by accent, by country etc, our options focus on what you want to change and how you want to change it. You should be able to sound the way you want to sound, not the way that anyone else thinks you should sound. 
+
+Get started by having a think about what you want to change. Check any you think apply, and those routes will open up in your galaxy. 
+
+Raising pitch []
+
+Lowering pitch []
+
+Keeping your volume the same []
+
+Your Confidence []
+
+[Launch] You can change these at any time!
+
+[I don’t know?] 
+
+It’s perfectly ok not to know straight away - let’s try and refine why you want to change your voice.
+
+Do you want your voice to sound higher or lower? []
+
+Do you want to speak louder? []
+
+Do you want to speak more butch or more femme? []
+
+[Launch] You can change these at any time, so don’t worry.
+
+//Introduction to Galaxy
+
+This is your galaxy. You can swipe left and right to find different routes, depending on what you want to change. Before we head off, first have a go at the volume route. 
+
+//Volume goals
+
+Lets start by setting your current baseline. Have a go at reading the text, without forcing your voice to do anything. Keep going for thirty seconds.
+
+>>I deserve to feel comfortable with my voice, and feeling confident deserves daily practice. I will take time for myself to explore the sound of my voice in a comfortable place. I'll reward myself when I make progress, but also I'll remember not to be worried if I don't make progress as quickly as I hope.
+
+Brilliant! Thanks for that. So it makes sense to start with a goal of {averageDb + 30}.
+
+Have a go at trying to speak louder. Read the text out loud and try and keep the bar as close to your target meter as possible. Please don’t strain your voice!
+
+>>Most of the time the changes to our voice take place over a long period of time. We therefore don't always notice it happening. Make sure you keep a recording of your voice, but keep an eye on the progress graphs as well. You might be surprised with what you find! The important thing is to try and do a little each day.
+
+//Outcomes
+
+(if met target)
+Wow! Fantastic effort - you've met your target of {userTarget} decibels for 30 seconds! 
+(if not met target)
+So close! Excellent attempt though, and you're making fantastic progress, don't stop now :)
+
+//Post Practice
+Remember to keep practicing every day; you'll start to see the results over time. 
+
+//Pitch Route
+Welcome to the pitch route. Here we're going to focus on how high or low your voice sounds. If you want to read more about pitch you can find more information at the What is Pitch planet.
+Otherwise select the Pitch Baseline planet to get started.
+
+//Pitch goals
+
+Lets start by setting your current baseline. Have a go at reading the text, without forcing your voice to do anything. Keep going for thirty seconds.
+
+>>Space 
+
+Wonderful! Thanks for that. So it makes sense to start with a goal of {averageHz + 60}.
