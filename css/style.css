@@ -1,0 +1,8 @@
+.page-container {
+    background-image:url(../img/bg.png);
+    background-position:center top;
+    background-size:contain;
+    height:600px;
+    margin:0 auto;
+    width:400px;
+}
