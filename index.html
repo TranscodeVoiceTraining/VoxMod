@@ -11,15 +11,28 @@
     <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
     <style>
       h1,h2,h3 {
+        color:#ffffff;
         font-family:'Josefin Sans';
         font-weight:normal;
       }
+      header[role=banner] {
+          background-color:#000000;
+          background-image:url(img/header-bg.jpg);
+          background-position:center center;
+          background-repeat:no-repeat;
+          background-size:contain;
+          padding-bottom:50%;
+          position:relative;
+          text-align:center;
+      }
+      .header-content {
+          bottom:0;
+          left:0;
+          position:absolute;
+          right:0;
+      }
       p {
           font-size:80%;
-      }
-      .page-header {
-          background-color:#000000;
-          background-image:none;
       }
       .project-name {
           font-size:400%;
@@ -31,14 +44,16 @@
     </style>
   </head>
   <body>
-    <section class="page-header">
-      <h1 class="project-name"><span style="color:purple !important;">V</span><span style="color:cyan !important;">O</span><span style="color:yellow !important;">X</span><span style="color:green !important;">M</span><span style="color:orange !important;">O</span><span style="color:purple !important;">D</span></h1>
-      <h2 class="project-tagline">Voice training web app developed at Trans*Code</h2>
-      <a href="https://transcodevoicetraining.github.io/VoxMod/welcome.html" class="btn">View Demo</a>
-      <a href="https://github.com/TranscodeVoiceTraining/VoxMod" class="btn">View on GitHub</a>
-      <a href="https://github.com/TranscodeVoiceTraining/VoxMod/zipball/master" class="btn">Download .zip</a>
-      <a href="https://github.com/TranscodeVoiceTraining/VoxMod/tarball/master" class="btn">Download .tar.gz</a>
-    </section>
+    <header role="banner">
+      <div class="header-content">
+        <h1 class="project-name"><span style="color:purple !important;">V</span><span style="color:cyan !important;">O</span><span style="color:yellow !important;">X</span><span style="color:green !important;">M</span><span style="color:orange !important;">O</span><span style="color:purple !important;">D</span></h1>
+        <h2 class="project-tagline">Voice training web app developed at Trans*Code</h2>
+        <a href="https://transcodevoicetraining.github.io/VoxMod/welcome.html" class="btn">View Demo</a>
+        <a href="https://github.com/TranscodeVoiceTraining/VoxMod" class="btn">View on GitHub</a>
+        <a href="https://github.com/TranscodeVoiceTraining/VoxMod/zipball/master" class="btn">Download .zip</a>
+        <a href="https://github.com/TranscodeVoiceTraining/VoxMod/tarball/master" class="btn">Download .tar.gz</a>
+      </div>
+    </header>
 
     <section class="main-content">
       <h3>
