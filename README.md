@@ -4,4 +4,4 @@ VoxMod is an online, browser-based tool to help trans* and non-binary people to 
 
 This project was started at [Trans*Code 2016](http://trans.tech/).
 
-See the [Mockup Demo](https://transcodevoicetraining.github.io/VoxMod/welcome.html).
+See the [Mockup Demo](https://transcodevoicetraining.github.io/VoxMod/welcome.html) and [Introductory Documentation](https://transcodevoicetraining.github.io/VoxMod/).
