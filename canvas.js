@@ -101,6 +101,9 @@ if (navigator.getUserMedia) {
 function visualize() {
   WIDTH = canvas.width;
   HEIGHT = canvas.height;
+  // var numberOfFrames = 0;
+  var listOfPitches = [];
+
 
 
   if(true/*visualSetting == "sinewave"*/) {
@@ -111,6 +114,15 @@ function visualize() {
 
     canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
 
+    function meanPitchSoFar(){
+      var sumOfPitches = 0;
+      for (var i = 0; i < listOfPitches.length; i++) {
+        sumOfPitches += listOfPitches[i];
+      }
+
+      return sumOfPitches / listOfPitches.length;
+    }
+
     function draw() {
 
       drawVisual = requestAnimationFrame(draw);
@@ -118,8 +130,13 @@ function visualize() {
       analyser.getByteTimeDomainData(dataArray);
       var YINDetector = PitchFinder.AMDF();
       var estimate = YINDetector(dataArray);
-      if(estimate.freq != -1)
-             document.getElementById("derp").innerHTML = estimate.freq.toFixed(2);
+      if(estimate.freq != -1) {
+         document.getElementById("currentPitch").innerHTML = estimate.freq.toFixed(2);
+         // numberOfFrames++;
+         listOfPitches.push(estimate.freq);
+         //TODO mathematically round before adding to array? toFixed returns string and not sure of fast way to round to 2 DP
+         document.getElementById("averagePitch").innerHTML = meanPitchSoFar().toFixed(2);
+       }
 
       canvasCtx.fillStyle = 'rgb(200, 200, 200)';
       canvasCtx.fillRect(0, 0, WIDTH, HEIGHT);
