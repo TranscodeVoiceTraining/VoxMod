@@ -1,5 +1,5 @@
 // fork getUserMedia for multiple browser versions, for those
-// that need prefixes
+// that need prefixes 
 
 navigator.getUserMedia = (navigator.getUserMedia ||
                           navigator.webkitGetUserMedia ||
@@ -24,6 +24,11 @@ var analyser = audioCtx.createAnalyser();
 analyser.minDecibels = -90;
 analyser.maxDecibels = -10;
 analyser.smoothingTimeConstant = 0.85;
+
+var analyser2 = audioCtx.createAnalyser();
+analyser2.minDecibels = -90;
+analyser2.maxDecibels = -10;
+analyser2.smoothingTimeConstant = 0.85;
 
 var distortion = audioCtx.createWaveShaper();
 var gainNode = audioCtx.createGain();
@@ -72,7 +77,7 @@ if (navigator.getUserMedia) {
       function(stream) {
          source = audioCtx.createMediaStreamSource(stream);
          source.connect(analyser);
-         analyser.connect(distortion);
+         analyser.connect(analyser2);
          // distortion.connect(biquadFilter);
          // biquadFilter.connect(convolver);
          // convolver.connect(gainNode);
@@ -96,8 +101,12 @@ if (navigator.getUserMedia) {
 function visualize() {
   WIDTH = canvas.width;
   HEIGHT = canvas.height;
+  // var numberOfFrames = 0;
+  var listOfPitches = [];
 
-  if(false/*visualSetting == "sinewave"*/) {
+
+
+  if(true/*visualSetting == "sinewave"*/) {
     analyser.fftSize = 2048;
     var bufferLength = analyser.fftSize;
     console.log(bufferLength);
@@ -105,11 +114,29 @@ function visualize() {
 
     canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
 
+    function meanPitchSoFar(){
+      var sumOfPitches = 0;
+      for (var i = 0; i < listOfPitches.length; i++) {
+        sumOfPitches += listOfPitches[i];
+      }
+
+      return sumOfPitches / listOfPitches.length;
+    }
+
     function draw() {
 
       drawVisual = requestAnimationFrame(draw);
 
       analyser.getByteTimeDomainData(dataArray);
+      var YINDetector = PitchFinder.AMDF();
+      var estimate = YINDetector(dataArray);
+      if(estimate.freq != -1) {
+         document.getElementById("currentPitch").innerHTML = estimate.freq.toFixed(2);
+         // numberOfFrames++;
+         listOfPitches.push(estimate.freq);
+         //TODO mathematically round before adding to array? toFixed returns string and not sure of fast way to round to 2 DP
+         document.getElementById("averagePitch").innerHTML = meanPitchSoFar().toFixed(2);
+       }
 
       canvasCtx.fillStyle = 'rgb(200, 200, 200)';
       canvasCtx.fillRect(0, 0, WIDTH, HEIGHT);
@@ -142,7 +169,7 @@ function visualize() {
 
     draw();
 
-  } else if(true/*visualSetting == "frequencybars"*/) {
+  } else if(false/*visualSetting == "frequencybars"*/) {
     analyser.fftSize = 256;
     var bufferLength = analyser.frequencyBinCount;
     console.log(bufferLength);
@@ -154,7 +181,6 @@ function visualize() {
       drawVisual = requestAnimationFrame(draw);
 
       analyser.getByteFrequencyData(dataArray);
-
       canvasCtx.fillStyle = 'rgb(0, 0, 0)';
       canvasCtx.fillRect(0, 0, WIDTH, HEIGHT);
 

@@ -17,19 +17,17 @@ SWIPE RIGHT TO GET STARTED
 Get started by having a think about what you want to change. Tap one, and you'll be taken to the Galaxy you want to take.
 You can switch Galaxies at any time.
 
-Raising pitch []
-
-Lowering pitch []
+Changing pitch []
 
 Regulating your volume []
 
-Your Confidence []
+Building Your Confidence []
 
-[I don’t know?] 
+I don’t know? [] 
 
 It’s perfectly ok not to know straight away - let’s try and refine why you want to change your voice.
 
-Do you want your voice to sound higher [] or lower? []
+Do you want your voice to sound higher or lower? []
 
 Do you want to speak louder? []
 
@@ -45,7 +43,7 @@ Do you wany your voice to sound more [] or less monotone []
 Welcome to the Pitch Galaxy. Here we're going to focus on how high or low your voice sounds. If you want to read more about pitch you can find more information at the What is Pitch planet.
 Otherwise select the Pitch Baseline planet to get started.
 
-//Pitch goals
+//Pitch Baseline
 
 Lets start by setting your current baseline. Have a go at reading the text, without forcing your voice to do anything. Keep going for thirty seconds.
 
@@ -54,7 +52,11 @@ Lets start by setting your current baseline. Have a go at reading the text, with
 Wonderful! Thanks for that. Your voice has an average pitch of {averagePitch} Hz. Also, your average volume is {averageVolume} and your rate of speaking is {wpm} words per minute.  So it makes sense to start with a goal of {averageHz + 60}.
 You can focus on volume and words per minute in other galaxies. But let's just focus on pitch for now. 
 
-Have a go at trying to speak louder. Read the text out loud and try and keep the bar as close to your target meter as possible. Please don’t strain your voice!
+Do you want to increase [] or decrease your pitch []?
+
+Have a go at trying to speak with a higher/lower pitch.
+We'll start off with a target of {averageFrequency + 30} Hz
+Read the text out loud and try and keep the bar as close to your target meter as possible. Please don’t strain your voice!
 
 >>As the force increases, the energy produced starts to get incredibly hot and the rock starts to burn. Soon, atoms are being bashed together with such energy that they fuse, releasing even more energy and lighting up space.
 
@@ -62,20 +64,38 @@ Have a go at trying to speak louder. Read the text out loud and try and keep the
 Wow! Fantastic effort - you've met your target of {userTarget} Hz for 30 seconds! 
 (if not met target)
 So close! Excellent attempt though, and you're making fantastic progress, don't stop now :)
+Pitch Galaxy [] Try again []
 
-//What is Pitch
+//What is Pitch?
 This planet is a chance for you to get a deeper understanding of what pitch is and how you can modify it. 
-Important Note: This app is a resource, not a definitive advice service. We're in the process of trying to get some more clinical advice on how to improve our resource.
+Important Note: This app is a resource, not an advice service. We're in the process of trying to get some more clinical advice on how to improve our resource.
 
 What is Pitch?
 Pitch is technically defined as the quality of a sound governed by the rate of vibrations producing it; the degree of highness or lowness of a tone.
 To most of us, that doesn't really mean a lot. A better way of putting it might be how high or low the tone of your voice is. That tone is measured in Hertz(Hz), which is a measure of frequency - how many waves in a second. 
 If you think of your voice as a sound wave, with peaks and troughs, a higher voice will have more peaks and troughs, whereas a lower voice will have less. 
 
-What causes pitch to change in human voice boxes? 
+What causes pitch to change in human voices? 
 Human voices are produced by a combination of air from the lungs, your tongue and teeth, and your voicebox. 
 
+What techniques can I use to change my pitch?
+Focus on the change made to your voice when you tighten your nasal passage. 
+
 You can write anything you'd like to remember about pitch below, and it will be added to your journal. 
+Back to Galaxy []
+
+//Pitch Push Two
+Now you've had a chance to push your pitch up, let's try increasing your pitch some more. 
+Just like before, read the text for 30 seconds and try and getting your pitch close to your target.
+
+>>A red dwarf is a kind of star. Red dwarf stars are smaller than half the size of the Sun. They are also cooler than most stars. Red dwarf stars are the most common in our galaxy, at least near our sun. The closest star to the Earth is named Proxima Centauri.
+
+(if met target)
+Excellent work! Fantastic effort - you've met your target of {userTarget} decibels for 30 seconds! 
+(if not met target)
+So close! Excellent attempt though, and you're making fantastic progress, don't stop now :)
+
+
 
 //Volume goals
 
