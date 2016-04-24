@@ -1,5 +1,5 @@
 // fork getUserMedia for multiple browser versions, for those
-// that need prefixes
+// that need prefixes 
 
 navigator.getUserMedia = (navigator.getUserMedia ||
                           navigator.webkitGetUserMedia ||
