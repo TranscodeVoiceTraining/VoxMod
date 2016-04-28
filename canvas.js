@@ -63,6 +63,24 @@ canvas.setAttribute('width',intendedWidth);
 
 var drawVisual;
 
+//mathematical functions
+function meanOfArray(array){
+  var sumOfItems = 0;
+  for (var i = 0; i < array.length; i++) {
+    sumOfItems += array[i];
+  }
+  return sumOfItems / array.length;
+}
+
+function standardDeviation(array){
+  var mean = meanOfArray(array);
+  var variance =array.reduce(function(a,b){
+    return Math.pow((mean - b),2) + a;
+  }, 0)/array.length;
+
+  return Math.sqrt(variance);
+ }
+
 //main block for doing the audio recording
 
 if (navigator.getUserMedia) {
@@ -115,12 +133,11 @@ function visualize() {
     canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
 
     function meanPitchSoFar(){
-      var sumOfPitches = 0;
-      for (var i = 0; i < listOfPitches.length; i++) {
-        sumOfPitches += listOfPitches[i];
-      }
+      return meanOfArray(listOfPitches);
+    }
 
-      return sumOfPitches / listOfPitches.length;
+    function standardDeviationOfPitches(){
+      return standardDeviation(listOfPitches);
     }
 
     function draw() {
@@ -136,6 +153,8 @@ function visualize() {
          listOfPitches.push(estimate.freq);
          //TODO mathematically round before adding to array? toFixed returns string and not sure of fast way to round to 2 DP
          document.getElementById("averagePitch").innerHTML = meanPitchSoFar().toFixed(2);
+         document.getElementById("pitchVariance").innerHTML =
+               standardDeviationOfPitches().toFixed(2);
        }
 
       canvasCtx.fillStyle = 'rgb(200, 200, 200)';
@@ -214,16 +233,18 @@ function voiceChange() {
 
 // event listeners to change visualize and voice settings
 
-mute.onclick = voiceMute;
 
-function voiceMute() {
-  if(mute.id == "") {
-    gainNode.gain.value = 0;
-    mute.id = "activated";
-    mute.innerHTML = "Unmute";
-  } else {
-    gainNode.gain.value = 1;
-    mute.id = "";    
-    mute.innerHTML = "Mute";
-  }
-}
+//Commented out mute functionality, may want a "pause" feature later on though
+// mute.onclick = voiceMute;
+
+// function voiceMute() {
+//   if(mute.id == "") {
+//     gainNode.gain.value = 0;
+//     mute.id = "activated";
+//     mute.innerHTML = "Unmute";
+//   } else {
+//     gainNode.gain.value = 1;
+//     mute.id = "";    
+//     mute.innerHTML = "Mute";
+//   }
+// }
