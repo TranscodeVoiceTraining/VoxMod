@@ -1,9 +1,10 @@
 $(function () {
     var data = voxmod.storage.load('VoiceAnalysisHistory') || [];
-    data = data.map(function (value) { return [new Date(value.timestamp).getTime(), value.averagePitch] })
+    averagePitchData = data.map(function (value) { return [new Date(value.timestamp).getTime(), value.averagePitch] })
+    pitchVarianceData = data.map(function (value) { return [new Date(value.timestamp).getTime(), value.pitchVariance] })
     $('#container').highcharts({
         chart: {
-            type: 'line'
+            type: 'spline'
         },
         title: {
             text: 'Voice Analysis'
@@ -30,8 +31,7 @@ $(function () {
         yAxis: {
             title: {
                 text: 'Frequency (Hz)'
-            },
-            min: 85
+            }
         },
         tooltip: {
             headerFormat: '<b>{point.y:.2f} Hz</b><br>',
@@ -40,8 +40,12 @@ $(function () {
 
         series: [{
             name: 'Average pitch',
-            data: data
-            }
+            data: averagePitchData
+        },
+        {
+            name: 'Pitch variance',
+            data: pitchVarianceData
+        }
     ]
     });
 });
