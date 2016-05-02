@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -38,17 +38,19 @@
 		<p>&nbsp; </p>
 	</div>
 	
-	</div>
-    <p><a class="btn btn-secondary" href="galaxy2.html" role="button">Finish recording</a></p>
+
+	<div>
+    <p><a class="btn btn-secondary" href="galaxy2.html" role="button" id="finish-recording">Finish recording</a></p>
+        <p><a class="btn btn-secondary" href="graph.html" role="button">See history</a></p>
 	</div>
 
+      <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+      <!-- Include all compiled plugins (below), or include individual files as needed -->
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-    
-    <script type="text/javascript" src="pitchfinder.js"></script>
-    <script type="text/javascript" src="canvas.js"></script>
+      <script type="text/javascript" src="storage.js"></script>
+      <script type="text/javascript" src="pitchfinder.js"></script>
+      <script type="text/javascript" src="canvas.js"></script>
   </body>
 </html>

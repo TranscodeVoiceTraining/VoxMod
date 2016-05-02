@@ -140,6 +140,18 @@ function visualize() {
       return standardDeviation(listOfPitches);
     }
 
+      //TODO: move this out of the visualise function if possible
+    function saveVoiceData() {
+        var voiceData = { averagePitch: meanPitchSoFar(), pitchVariance: standardDeviationOfPitches(), timestamp: new Date() };
+        //TODO: make this a global (namespaced) constant or something?
+        var voiceHistoryKey = 'VoiceAnalysisHistory';
+        var voiceHistory = voxmod.storage.load(voiceHistoryKey) || [];
+        voiceHistory.push(voiceData);
+        voxmod.storage.save(voiceHistoryKey, voiceHistory);
+    }
+
+    $('#finish-recording').click(function () { saveVoiceData(); return true; });
+
     function draw() {
 
       drawVisual = requestAnimationFrame(draw);

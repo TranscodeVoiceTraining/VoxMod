@@ -1,10 +1,12 @@
 $(function () {
+    var data = voxmod.storage.load('VoiceAnalysisHistory') || [];
+    data = data.map(function (value) { return [new Date(value.timestamp).getTime(), value.averagePitch] })
     $('#container').highcharts({
         chart: {
-            type: 'spline'
+            type: 'line'
         },
         title: {
-            text: 'Voice Analysis - 23 May'
+            text: 'Voice Analysis'
         },
         subtitle: {
             text: 'Frequency'
@@ -12,10 +14,17 @@ $(function () {
         xAxis: {
             type: 'datetime',
             dateTimeLabelFormats: {
-                millisecond:"%A, %b %e, %H:%M:%S.%L",
+                millisecond: "%b %e, %H:%M:%S.%L",
+                second: "%b %e, %H:%M:%S",
+                minute: "%b %e, %H:%M",
+                hour: "%b %e, %H:%M",
+                day: "%b %e, %Y",
+                week: "%b %e, %Y",
+                month: "%B %Y",
+                year: "%Y"
             },
             title: {
-                text: 'timestamp'
+                text: 'Timestamp'
             }
         },
         yAxis: {
@@ -30,23 +39,8 @@ $(function () {
         },
 
         series: [{
-            name: 'current snapshot',
-            data: [
-                    [Date.UTC(2016, 4, 23, 14, 0, 41, 11), 105], 
-                    [Date.UTC(2016, 4, 23, 14, 0, 46, 18), 96], 
-                    [Date.UTC(2016, 4, 23, 14, 0, 51, 26), 94], 
-                    [Date.UTC(2016, 4, 23, 14, 0, 59, 10), 103], 
-                    [Date.UTC(2016, 4, 23, 14, 1, 23, 46), 108], 
-                    [Date.UTC(2016, 4, 23, 14, 1, 29, 56), 107], 
-                    [Date.UTC(2016, 4, 23, 14, 1, 31, 08), 105], 
-                    [Date.UTC(2016, 4, 23, 14, 1, 39, 37), 101], 
-                    [Date.UTC(2016, 4, 23, 14, 1, 43, 39), 99],
-                    [Date.UTC(2016, 4, 23, 14, 2, 01, 26), 106],
-                    [Date.UTC(2016, 4, 23, 14, 2, 18, 32), 99],
-                    [Date.UTC(2016, 4, 23, 14, 2, 25, 48), 96],
-                    [Date.UTC(2016, 4, 23, 14, 2, 31, 21), 94],
-                    [Date.UTC(2016, 4, 23, 14, 2, 47, 13), 93],
-                    [Date.UTC(2016, 4, 23, 14, 2, 56, 27), 95]]
+            name: 'Average pitch',
+            data: data
             }
     ]
     });
