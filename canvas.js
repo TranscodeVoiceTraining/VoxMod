@@ -1,6 +1,8 @@
+var voxmod = voxmod || {};
+
 // fork getUserMedia for multiple browser versions, for those
 // that need prefixes 
-
+//TODO: Change to use navigator.mediaDevices.getUserMedia() (GitHib issue #1)
 navigator.getUserMedia = (navigator.getUserMedia ||
                           navigator.webkitGetUserMedia ||
                           navigator.mozGetUserMedia ||
@@ -35,23 +37,6 @@ var gainNode = audioCtx.createGain();
 var biquadFilter = audioCtx.createBiquadFilter();
 var convolver = audioCtx.createConvolver();
 
-// distortion curve for the waveshaper, thanks to Kevin Ennis
-// http://stackoverflow.com/questions/22312841/waveshaper-node-in-webaudio-how-to-emulate-distortion
-
-function makeDistortionCurve(amount) {
-  var k = typeof amount === 'number' ? amount : 50,
-    n_samples = 44100,
-    curve = new Float32Array(n_samples),
-    deg = Math.PI / 180,
-    i = 0,
-    x;
-  for ( ; i < n_samples; ++i ) {
-    x = i * 2 / n_samples - 1;
-    curve[i] = ( 3 + k ) * x * 20 * deg / ( Math.PI + k * Math.abs(x) );
-  }
-  return curve;
-};
-
 // set up canvas context for visualizer
 
 var canvas = document.querySelector('.visualizer');
@@ -63,33 +48,35 @@ canvas.setAttribute('width',intendedWidth);
 
 var drawVisual;
 
-//mathematical functions
-function meanOfArray(array){
-  var sumOfItems = 0;
-  for (var i = 0; i < array.length; i++) {
-    sumOfItems += array[i];
-  }
-  return sumOfItems / array.length;
-}
 
-function standardDeviation(array){
-  var mean = meanOfArray(array);
-  var variance =array.reduce(function(a,b){
-    return Math.pow((mean - b),2) + a;
-  }, 0)/array.length;
+var MATHS = {
+  //mathematical functions
+  meanOfArray: function (array){
+    var sumOfItems = 0;
+    for (var i = 0; i < array.length; i++) {
+      sumOfItems += array[i];
+    }
+    return sumOfItems / array.length;
+  },
 
-  return Math.sqrt(variance);
- }
+  standardDeviation: function (array){
+    var mean = this.meanOfArray(array);
+    var variance =array.reduce(function(a,b){
+      return Math.pow((mean - b),2) + a;
+    }, 0)/array.length;
 
-//main block for doing the audio recording
+    return Math.sqrt(variance);
+   }
+};
+Object.freeze(MATHS);
 
+voxmod.maths = MATHS;
+
+//Setup recording if supported by browser
 if (navigator.getUserMedia) {
-   console.log('getUserMedia supported.');
    navigator.getUserMedia (
       // constraints - only audio needed for this app
-      {
-         audio: true
-      },
+      {audio: true},
 
       // Success callback
       function(stream) {
@@ -103,8 +90,6 @@ if (navigator.getUserMedia) {
          //distortion.connect(audioCtx.destination);
 
       	 visualize();
-         voiceChange();
-
       },
 
       // Error callback
@@ -114,6 +99,7 @@ if (navigator.getUserMedia) {
    );
 } else {
    console.log('getUserMedia not supported on your browser!');
+   alert("VoxMod does not currently support this browser. We recommend using a modern browser like Firefox or Chrome");
 }
 
 function visualize() {
@@ -121,130 +107,116 @@ function visualize() {
   HEIGHT = canvas.height;
   // var numberOfFrames = 0;
   var listOfPitches = [];
+  
+  analyser.fftSize = 2048;
+  var bufferLength = analyser.fftSize;
+  console.log(bufferLength);
+  var dataArray = new Uint8Array(bufferLength);
 
+  canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
 
-
-  if(true/*visualSetting == "sinewave"*/) {
-    analyser.fftSize = 2048;
-    var bufferLength = analyser.fftSize;
-    console.log(bufferLength);
-    var dataArray = new Uint8Array(bufferLength);
-
-    canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
-
-    function meanPitchSoFar(){
-      return meanOfArray(listOfPitches);
-    }
-
-    function standardDeviationOfPitches(){
-      return standardDeviation(listOfPitches);
-    }
-
-      //TODO: move this out of the visualise function if possible
-    function saveVoiceData() {
-        var voiceData = { averagePitch: meanPitchSoFar(), pitchVariance: standardDeviationOfPitches(), timestamp: new Date() };
-        //TODO: make this a global (namespaced) constant or something?
-        var voiceHistoryKey = 'VoiceAnalysisHistory';
-        var voiceHistory = voxmod.storage.load(voiceHistoryKey) || [];
-        voiceHistory.push(voiceData);
-        voxmod.storage.save(voiceHistoryKey, voiceHistory);
-    }
-
-    $('#finish-recording').click(function () { saveVoiceData(); return true; });
-
-    function draw() {
-
-      drawVisual = requestAnimationFrame(draw);
-
-      analyser.getByteTimeDomainData(dataArray);
-      var YINDetector = PitchFinder.AMDF();
-      var estimate = YINDetector(dataArray);
-      if(estimate.freq != -1) {
-         document.getElementById("currentPitch").innerHTML = estimate.freq.toFixed(2);
-         // numberOfFrames++;
-         listOfPitches.push(estimate.freq);
-         //TODO mathematically round before adding to array? toFixed returns string and not sure of fast way to round to 2 DP
-         document.getElementById("averagePitch").innerHTML = meanPitchSoFar().toFixed(2);
-         document.getElementById("pitchVariance").innerHTML =
-               standardDeviationOfPitches().toFixed(2);
-       }
-
-      canvasCtx.fillStyle = 'rgb(200, 200, 200)';
-      canvasCtx.fillRect(0, 0, WIDTH, HEIGHT);
-
-      canvasCtx.lineWidth = 2;
-      canvasCtx.strokeStyle = 'rgb(0, 0, 0)';
-
-      canvasCtx.beginPath();
-
-      var sliceWidth = WIDTH * 1.0 / bufferLength;
-      var x = 0;
-
-      for(var i = 0; i < bufferLength; i++) {
-   
-        var v = dataArray[i] / 128.0;
-        var y = v * HEIGHT/2;
-
-        if(i === 0) {
-          canvasCtx.moveTo(x, y);
-        } else {
-          canvasCtx.lineTo(x, y);
-        }
-
-        x += sliceWidth;
-      }
-
-      canvasCtx.lineTo(canvas.width, canvas.height/2);
-      canvasCtx.stroke();
-    };
-
-    draw();
-
-  } else if(false/*visualSetting == "frequencybars"*/) {
-    analyser.fftSize = 256;
-    var bufferLength = analyser.frequencyBinCount;
-    console.log(bufferLength);
-    var dataArray = new Uint8Array(bufferLength);
-
-    canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
-
-    function draw() {
-      drawVisual = requestAnimationFrame(draw);
-
-      analyser.getByteFrequencyData(dataArray);
-      canvasCtx.fillStyle = 'rgb(0, 0, 0)';
-      canvasCtx.fillRect(0, 0, WIDTH, HEIGHT);
-
-      var barWidth = (WIDTH / bufferLength) * 2.5;
-      var barHeight;
-      var x = 0;
-
-      for(var i = 0; i < bufferLength; i++) {
-        barHeight = dataArray[i];
-
-        canvasCtx.fillStyle = 'rgb(' + (barHeight+100) + ',50,50)';
-        canvasCtx.fillRect(x,HEIGHT-barHeight/2,barWidth,barHeight/2);
-
-        x += barWidth + 1;
-      }
-    };
-
-    draw();
-
-  } else if(visualSetting == "off") {
-    canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
-    canvasCtx.fillStyle = "red";
-    canvasCtx.fillRect(0, 0, WIDTH, HEIGHT);
+  function meanPitchSoFar(){
+    return voxmod.maths.meanOfArray(listOfPitches);
   }
 
+  function standardDeviationOfPitches(){
+    return voxmod.maths.standardDeviation(listOfPitches);
+  }
+
+  //TODO: move this out of the visualise function if possible
+  function saveVoiceData() {
+      var voiceData = { averagePitch: meanPitchSoFar(), pitchVariance: standardDeviationOfPitches(), timestamp: new Date() };
+      //TODO: make this a global (namespaced) constant or something?
+      var voiceHistoryKey = 'VoiceAnalysisHistory';
+      var voiceHistory = voxmod.storage.load(voiceHistoryKey) || [];
+      voiceHistory.push(voiceData);
+      voxmod.storage.save(voiceHistoryKey, voiceHistory);
+  }
+
+  $('#finish-recording').click(function () { saveVoiceData(); return true; });
+
+  function draw() {
+
+    drawVisual = requestAnimationFrame(draw);
+
+    analyser.getByteTimeDomainData(dataArray);
+    var YINDetector = PitchFinder.AMDF();
+    var estimate = YINDetector(dataArray);
+    if(estimate.freq != -1) {
+       document.getElementById("currentPitch").innerHTML = estimate.freq.toFixed(2);
+       // numberOfFrames++;
+       listOfPitches.push(estimate.freq);
+       //TODO mathematically round before adding to array? toFixed returns string and not sure of fast way to round to 2 DP
+       document.getElementById("averagePitch").innerHTML = meanPitchSoFar().toFixed(2);
+       document.getElementById("pitchVariance").innerHTML =
+             standardDeviationOfPitches().toFixed(2);
+     }
+
+    canvasCtx.fillStyle = 'rgb(200, 200, 200)';
+    canvasCtx.fillRect(0, 0, WIDTH, HEIGHT);
+
+    canvasCtx.lineWidth = 2;
+    canvasCtx.strokeStyle = 'rgb(0, 0, 0)';
+
+    canvasCtx.beginPath();
+
+    var sliceWidth = WIDTH * 1.0 / bufferLength;
+    var x = 0;
+
+    for(var i = 0; i < bufferLength; i++) {
+ 
+      var v = dataArray[i] / 128.0;
+      var y = v * HEIGHT/2;
+
+      if(i === 0) {
+        canvasCtx.moveTo(x, y);
+      } else {
+        canvasCtx.lineTo(x, y);
+      }
+
+      x += sliceWidth;
+    }
+
+    canvasCtx.lineTo(canvas.width, canvas.height/2);
+    canvasCtx.stroke();
+  };
+
+  draw();
+
+  //==BELOW is code for alternative graph, we may want to implement this
+  // as it's more informative than the waveform==
+
+   // else if(false/*visualSetting == "frequencybars"*/) {
+   //  analyser.fftSize = 256;
+   //  var bufferLength = analyser.frequencyBinCount;
+   //  console.log(bufferLength);
+   //  var dataArray = new Uint8Array(bufferLength);
+
+   //  canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
+
+   //  function draw() {
+   //    drawVisual = requestAnimationFrame(draw);
+
+   //    analyser.getByteFrequencyData(dataArray);
+   //    canvasCtx.fillStyle = 'rgb(0, 0, 0)';
+   //    canvasCtx.fillRect(0, 0, WIDTH, HEIGHT);
+
+   //    var barWidth = (WIDTH / bufferLength) * 2.5;
+   //    var barHeight;
+   //    var x = 0;
+
+   //    for(var i = 0; i < bufferLength; i++) {
+   //      barHeight = dataArray[i];
+
+   //      canvasCtx.fillStyle = 'rgb(' + (barHeight+100) + ',50,50)';
+   //      canvasCtx.fillRect(x,HEIGHT-barHeight/2,barWidth,barHeight/2);
+
+   //      x += barWidth + 1;
+   //    }
+   //  };
+
+   // draw();
 }
-
-function voiceChange() {
-
-}
-
-// event listeners to change visualize and voice settings
-
 
 //Commented out mute functionality, may want a "pause" feature later on though
 // mute.onclick = voiceMute;
